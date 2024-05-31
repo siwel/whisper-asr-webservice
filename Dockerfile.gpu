@@ -81,6 +81,6 @@ RUN $POETRY_VENV/bin/pip install torch==1.13.1+cu117 -f https://download.pytorch
 
 RUN apt-get install -y socat
 
-EXPOSE 9000
+EXPOSE 8888
 
 CMD gunicorn --bind 0.0.0.0:9000 --workers 1 --timeout 0 app.webservice:app -k uvicorn.workers.UvicornWorker & socat TCP6-LISTEN:8888,fork TCP4:0.0.0.0:9000;
