@@ -79,6 +79,8 @@ COPY --from=swagger-ui /usr/share/nginx/html/swagger-ui-bundle.js swagger-ui-ass
 RUN poetry install
 RUN $POETRY_VENV/bin/pip install torch==1.13.1+cu117 -f https://download.pytorch.org/whl/torch
 
+RUN apt-get install -y socat
+
 EXPOSE 9000
 
-CMD gunicorn --bind '[::]:9000' --workers 1 --timeout 0 app.webservice:app -k uvicorn.workers.UvicornWorker
+CMD gunicorn --bind 0.0.0.0:9000 --workers 1 --timeout 0 app.webservice:app -k uvicorn.workers.UvicornWorker & socat TCP6-LISTEN:8888,fork TCP4:0.0.0.0:9000;
